@@ -1,24 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useState} from 'react';
 import './App.css';
+import Search from './components/Search';
+import List from './components/List';
 
 function App() {
+  const [searchData, setSearchData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [noResultTxt, setNoResultTxt] = useState('');
+
+  const getSearchedData = (data) => setSearchData(data);
+  const loading = (data) => setIsLoading(data);
+  const noResult = (message) => setNoResultTxt(message);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <div className="logo-wrap">
+            <img src="/img/search.png" alt=""/>
+            AutoComplete
+        </div>
+        <Search
+            getData={getSearchedData}
+            isSeeking={loading}
+            noResult={noResult}
+        />
+        {isLoading ? <img src="/img/loading.gif" alt=""/> :
+            noResultTxt ? <p className='no-result'>{noResultTxt}</p> : (searchData.length ? <List data={searchData}/> : '')}
+        <style jsx="true">{`
+            .logo-wrap {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-family: unset;
+                margin: 20px;
+                font-weight: 600;
+            }    
+            .logo-wrap img {
+                margin-right: 10px;
+                max-width: 50px
+            }
+            .no-result {
+                margin-top: 15px;
+                
+            }
+        `}</style>
     </div>
   );
 }
